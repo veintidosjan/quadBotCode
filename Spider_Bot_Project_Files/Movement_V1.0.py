@@ -1,6 +1,6 @@
 '''
     Author:                                     Jan Veintidos
-    Last Modification Date:                     8/28/2021
+    Last Modification Date:                     10/1/2021
     Description:                                This code will be written for the initial movement for the spider bot
     Notes:                                      The bot was 3D printed all stl files will be located in a seprate folder in the files if you want to se what the robot 
                                                 looks like. Dev__I think this code can be changed to be ran with loops struggling with the initial movement code... 
@@ -123,36 +123,67 @@ def standardHomePosition():
     #home position for main joints 
     pwm.set_pwm(0,0,500)
     pwm.set_pwm(4,0,275)
-    pwm.set_pwm(8,0,350)
+    pwm.set_pwm(8,0,300)
     pwm.set_pwm(12,0,550)
 
     #home position for secondary joints
-    pwm.set_pwm(1,0,400)
-    pwm.set_pwm(5,0,230)
-    pwm.set_pwm(9,0,450)
-    pwm.set_pwm(13,0,200)
+    pwm.set_pwm(1,0,500)
+    pwm.set_pwm(5,0,120)
+    pwm.set_pwm(9,0,550)
+    pwm.set_pwm(13,0,140)
 
     #home position for third set of joints
-    pwm.set_pwm(2,0,290)
-    pwm.set_pwm(6,0,300)
-    pwm.set_pwm(10,0,475)
-    pwm.set_pwm(14,0,175)
+    pwm.set_pwm(2,0,400)
+    pwm.set_pwm(6,0,110)
+    pwm.set_pwm(10,0,550)
+    pwm.set_pwm(14,0,110)
 
 #function to move individual legs foward
 def fowardPosition(flag):
     #joints that move the positioning of the legs are 0,4,8,12
     #left front leg
     if flag == 0:
+        #moves joints 2,3 positions
+        pwm.set_pwm(2,0,250)
+        pwm.set_pwm(1,0,350)
+        time.sleep(.5)
+        #moves joint 1 position
         pwm.set_pwm(0,0,600)
+        time.sleep(.5)
+        #moves joint 2,3 back to home position
+        pwm.set_pwm(2,0,400)
+        pwm.set_pwm(1,0,500)
+        
     #left back leg
     elif flag == 1:
-        pwm.set_pwm(8,0,550)
+        pwm.set_pwm(10,0,450)
+        pwm.set_pwm(9,0,400)
+        time.sleep(.5)
+        pwm.set_pwm(8,0,400)
+        time.sleep(.5)
+        pwm.set_pwm(10,0,550)
+        pwm.set_pwm(9,0,550)
+    
     #right front leg
     elif flag == 2:
+        pwm.set_pwm(5,0,275)
+        pwm.set_pwm(6,0,275)
+        time.sleep(.5)
         pwm.set_pwm(4,0,200)
+        time.sleep(.5)
+        pwm.set_pwm(5,0,120)
+        pwm.set_pwm(6,0,150)
+        time.sleep(.5)
+
     #right back leg
     elif flag == 3:
-        pwm.set_pwm(12,0,300)
+        pwm.set_pwm(14,0,200)
+        pwm.set_pwm(13,0,250)
+        time.sleep(.5)
+        pwm.set_pwm(12,0,450)
+        time.sleep(.5)
+        pwm.set_pwm(14,0,110)
+        pwm.set_pwm(13,0,140)
 
 def backPosition(flag):
     #joints that move the positioning of the legs 0,4,8,12
@@ -184,6 +215,22 @@ def secondaryJoint(flag):
     elif flag == 3:
         pwm.set_pwm(13,0,450)
 
+def fowardWalking():
+    # 0 is left front leg
+    # 1 is left back leg
+    # 2 is right front leg
+    # 3 is right back leg
+    fowardPosition(1)
+    time.sleep(.5)
+
+    fowardPosition(0)
+    time.sleep(.5)
+
+    fowardPosition(2)
+    time.sleep(.5)
+
+    fowardPosition(3)
+    time.sleep(.5)
 
 def main():
     #function to call code to print message
@@ -195,22 +242,12 @@ def main():
    
    #walking forward cycle move two legs on opposite sides front and opposite back foward then raise the two legs that are not being used and 
    #move those foward like the previous legs.  Each cycle needs you to go back to the home position
-    
+     
     while True:
-
-        fowardPosition(0)
-        time.sleep(1)
-
-        fowardPosition(2)
-        time.sleep(1)
-
-        fowardPosition(1)
-        time.sleep(1)
-
-        fowardPosition(3)
-        time.sleep(1)
-
         standardHomePosition()
         time.sleep(1)
-        
+        fowardWalking()
+        time.sleep(1)
+
+    
 main()
